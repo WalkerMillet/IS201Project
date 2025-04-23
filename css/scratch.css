@@ -1,0 +1,98 @@
+.common {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+    background-color: black;
+    color: white;
+    height: 100px;
+    line-height: 100px;
+}
+
+.mainbody {
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: space-between;  /* This will place content and images on opposite sides */
+    align-items: left;  /* Align items at the top */
+    padding: 10px;  /* Add some space around the content */
+}
+
+
+img {
+    display: block;
+    margin-left: 42.5%;  
+    margin-right: auto;
+    width: 15%;  /* Take up 35% of the available width */
+}
+
+
+.footer {
+    position: fixed;
+    background-color: black;
+    color: white;
+    bottom: 0px;
+    left: 5px;
+    right: 5px;
+    height: 25px;
+    line-height: 25px;
+}
+
+nav {
+    background-color: lightgray;
+    padding: 10px;
+    overflow: hidden;
+}
+
+nav a {
+    color: #333;
+    text-decoration: underline;
+    padding: 5%;
+    font-weight: bold;
+    color: blue;
+}
+
+nav a:hover {
+    background-color: #ccc;
+}
+
+
+ol{
+    list-style-position: inside;
+    text-align: center;
+}
+
+.centeredList{
+    padding-left: 0;
+    list-style-position: outside;
+    margin: 0 auto;
+    display: table;
+    text-align: left;
+}
+
+#link{
+    color:blue
+}
+
+iframe{
+    padding-left: 26.5%;
+
+}
+
+body{
+    background-color: whitesmoke;
+}
+
+.tableau{
+    position: relative; 
+    padding-bottom: 65%; 
+    height: 0;
+    overflow-x: auto;
+
+}
+
+.extrastyling{
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px;
+}

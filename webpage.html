@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Number Guessing Game</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f5;
+      padding: 2rem;
+    }
+    .container {
+      background: white;
+      max-width: 500px;
+      margin: auto;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 12px;
+    }
+    input, button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    #result {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    #chartContainer {
+      margin-top: 2rem;
+      display: none;
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Guess the Number (1–100)</h1>
+    <input type="number" id="guess" placeholder="Enter your guess" min="1" max="100" />
+    <br />
+    <button onclick="submitGuess()">Submit Guess</button>
+    <p id="result"></p>
+
+    <div id="chartContainer">
+      <h3>Games by Number of Guesses</h3>
+      <canvas id="guessChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    let target = Math.floor(Math.random() * 100) + 1;
+    let guessCount = 0;
+    const guessDistribution = {};
+    let guessChart = null;
+
+    const guessInput = document.getElementById("guess");
+    const result = document.getElementById("result");
+    const chartContainer = document.getElementById("chartContainer");
+
+    // Submit guess on Enter
+    guessInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        submitGuess();
+      }
+    });
+
+    function submitGuess() {
+      const userGuess = Number(guessInput.value);
+      guessCount++;
+
+      if (userGuess < 1 || userGuess > 100 || isNaN(userGuess)) {
+        result.textContent = "Please enter a number between 1 and 100.";
+        return;
+      }
+
+      if (userGuess === target) {
+        result.textContent = `🎉 Correct! It took you ${guessCount} guesses. Starting a new game...`;
+
+        if (guessDistribution[guessCount]) {
+          guessDistribution[guessCount]++;
+        } else {
+          guessDistribution[guessCount] = 1;
+        }
+
+        // Show and initialize chart if it's the first game
+        if (!guessChart) {
+          chartContainer.style.display = "block";
+          initChart();
+        } else {
+          updateChart();
+        }
+
+        startNewGame();
+      } else if (userGuess < target) {
+        result.textContent = "Too low! Try again.";
+      } else {
+        result.textContent = "Too high! Try again.";
+      }
+
+      guessInput.value = "";
+      guessInput.focus();
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('guessChart').getContext('2d');
+      guessChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Number of Games',
+            data: [],
+            backgroundColor: '#4e79a7'
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Games'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Number of Guesses'
+              }
+            }
+          }
+        }
+      });
+
+      updateChart();
+    }
+
+    function updateChart() {
+      const sortedKeys = Object.keys(guessDistribution).map(Number).sort((a, b) => a - b);
+      guessChart.data.labels = sortedKeys;
+      guessChart.data.datasets[0].data = sortedKeys.map(k => guessDistribution[k]);
+      guessChart.update();
+    }
+
+    function startNewGame() {
+      target = Math.floor(Math.random() * 100) + 1;
+      guessCount = 0;
+    }
+  </script>
+</body>
+</html>
